@@ -1,10 +1,7 @@
 const path = require('path');
-const LiveReloadPlugin = require('webpack-livereload-plugin');
+const webpack = require('webpack');
 
 module.exports = {
-	progress: true,
-	colors: true,
-	devtool: 'eval-cheap-module-source-map',
 	entry: './src/main.js',
 	output: {
 		path: path.join(__dirname, 'public/'),
@@ -27,8 +24,11 @@ module.exports = {
 		}],
 	},
 	plugins: [
-		new LiveReloadPlugin({
-			appendScriptTag: true,
+		new webpack.DefinePlugin({
+			'process.env': {
+				NODE_ENV: JSON.stringify('production'),
+			},
 		}),
+		new webpack.optimize.UglifyJsPlugin({ minimize: true }),
 	],
 };
