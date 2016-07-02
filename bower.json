@@ -1,0 +1,21 @@
+{
+  "name": "dictation-helper",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Wesley Luk <wesleyluk@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/WesleyLuk90/dictation-helper",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/bower",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6"
+  }
+}
