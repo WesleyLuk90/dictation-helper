@@ -5,6 +5,8 @@ export class DictationArea extends React.Component {
 		super(props);
 		this.state = {
 			index: 0,
+			voices: [],
+			selectedVoice: 0,
 		};
 		this.initializeVoice();
 
@@ -37,13 +39,12 @@ export class DictationArea extends React.Component {
 	initializeVoice() {
 		this.synth = window.speechSynthesis;
 		speechSynthesis.onvoiceschanged = () => {
-			this.voices = this.synth.getVoices();
-			this.ready = true;
+			this.setState({ voices: this.synth.getVoices() });
 		};
 	}
 
 	getLines() {
-		const lines = this.props.text.split(/[;,.!]/g);
+		const lines = this.props.text.split(/[;,.!:]/g);
 		const linesOut = [];
 		for (let i = 0; i < lines.length; i++) {
 			const thisLine = lines[i].trim();
@@ -62,7 +63,7 @@ export class DictationArea extends React.Component {
 
 	speakLine(next) {
 		const currentLine = this.getLines()[next];
-		const voice = this.synth.getVoices()[2];
+		const voice = this.getVoice();
 		if (!voice || !currentLine) {
 			return;
 		}
@@ -100,8 +101,21 @@ export class DictationArea extends React.Component {
 		return '';
 	}
 
+	selectVoice(e) {
+		this.setState({ selectedVoice: e.target.value });
+	}
+
+	getVoice() {
+		return this.synth.getVoices()[this.state.selectedVoice];
+	}
+
 	render() {
 		return (<div>
+			<div>
+			<select value={this.state.selectedVoice} onChange={(e) => this.selectVoice(e)}>
+				{this.state.voices.map((v, i) => <option value={i} key={i}>{v.name}</option>)}
+			</select>
+			</div>
 			{this.getLines().map((p, i) => <p key={i} className={this.getClass(i)} onDoubleClick={(e) => this.goTo(e, i)}>{p}</p>)}
 		</div>);
 	}
